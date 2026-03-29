@@ -9,6 +9,8 @@ load_dotenv()
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.schema.output_parser import StrOutputParser
 
 
 
@@ -84,4 +86,21 @@ class ChatBot():
     )
 
 
-    
+    # Chaining the process
+    rag_chain = (
+        {"context": docsearch.as_retriever(), "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+
+
+# Instantiating ChatBot and input for user_prompt 
+bot = ChatBot()
+user_prompt = input("Ask me anything: ")
+
+# Invoking chain 
+response = bot.rag_chain.invoke(user_prompt)
+
+# printing response
+print(response)
