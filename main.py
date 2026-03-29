@@ -35,7 +35,20 @@ llm = ChatGroq(
 )
 
 
+# Setting Prompt Templates
+from langchain_core.prompts import PromptTemplate
 
+template = """
+You are a fortune teller. These Humans will ask you a questions about their life.
+Use following piece of context only and not help from other places to answer the question.
+If you don't know the answer, just say you don't know and just stick to the horoscope information.
+keep the answer within 2 sentences and concise.
+
+Context: {context}
+Question: {question}
+Answer: 
+
+"""
 
 
 # Defining ChatBot class
@@ -62,3 +75,13 @@ class ChatBot():
     else:
         # Link to the existing index
         docsearch = PineconeVectorStore.from_existing_index(index_name, embeddings)
+
+
+    # setting Final prompt along with context 
+    prompt = PromptTemplate(
+        template = template,
+        input_variables = ["context", "question"]
+    )
+
+
+    
