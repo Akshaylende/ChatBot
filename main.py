@@ -25,6 +25,18 @@ pc = Pinecone(api_key= os.getenv('PINECONE_API_KEY'))
 index_name = "langchain-demo"
 
 
+# Mixtral model info and setup
+from langchain_groq import ChatGroq
+
+llm = ChatGroq(
+    model="llama-3.1-8b-instant", 
+    temperature=0.8,
+    api_key=os.getenv("GROQ_API_KEY")
+)
+
+
+
+
 
 # Defining ChatBot class
 class ChatBot():
@@ -50,5 +62,3 @@ class ChatBot():
     else:
         # Link to the existing index
         docsearch = PineconeVectorStore.from_existing_index(index_name, embeddings)
-
-    
